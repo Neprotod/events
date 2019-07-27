@@ -29,11 +29,16 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
+                        <div class="login_block">
+                            <a href="{{ route('home') }}">Главная</a>
+                            <a href="{{ route('account') }}">Аккаунт</a>
+                        </div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="Logout" class="btn btn-outline-secondary">Выйти</button>
                         </form>
                     @else
+                        <a href="{{ route('home') }}">Главная</a>
                         <a href="{{ route('login') }}">Войти</a>
 
                         @if (Route::has('register'))

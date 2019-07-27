@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -49,9 +49,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'full_name' => ['required', 'string'],
+            'mob_phone' => ['required', 'string', 'max:20'],
+            'hobby' => ['required', 'string'],
+            'birthday_dd' => ['required', 'integer',"min:1","max:31"],
+            'birthday_mm' => ['required', 'integer',"min:1","max:12"],
+            'birthday_yy' => ['required', 'integer'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:4', 'confirmed'],
         ]);
     }
 
@@ -63,8 +68,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $data['birthday'] = sprintf("%s-%s-%s", $data['birthday_yy'], $data['birthday_mm'], $data['birthday_dd']);
+
         return User::create([
-            'name' => $data['name'],
+            'full_name' => $data['full_name'],
+            'mob_phone' => $data['mob_phone'],
+            'hobby' => $data['hobby'],
+            'birthday' => $data['birthday'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

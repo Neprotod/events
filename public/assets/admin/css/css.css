@@ -1,3 +1,33 @@
+body{
+    padding-bottom:100px;
+}
+.top-right{
+    float:right;
+}
+
+.left_menu{
+    /*background:rgb(70, 70, 70);*/
+}
+
+.left_menu nav a{
+    width:100%;
+    height:100%;
+    padding:16px 8px;
+}
+
+.left_menu nav a:hover{
+
+}
+
+.title_log_block{
+    font-size:20px;
+    color:#999;
+}
+
+.log_block{
+    margin-top:10px;
+}
+
 html, body {
     background-color: #fff;
     color: #636b6f;

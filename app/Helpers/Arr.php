@@ -86,17 +86,6 @@ class Arr
      * Превращает объект в массив
      */
     public static function to_array($obj){
-        $tmp = array();
-        if (is_object($obj)) {
-            foreach($obj as $key => $value){
-                if(is_object($value)){
-                    $tmp[$key] = self::to_array($value);
-                }
-                $tmp[$key] = $value;
-            }
-            return $tmp;
-        }else{
-            return $obj;
-        }
+        return json_decode(json_encode($obj), true);
     }
 }

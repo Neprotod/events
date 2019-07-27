@@ -25,31 +25,34 @@
         <script src="{{ URL::asset('js/js.js') }}"></script>
     </head>
     <body class="{{ $prefix_body }}">
-        <div class="flex-center position-ref full-height container-fluid">
+        <div class="container-fluid">
             @if (Route::has('login'))
                 <div class="top-right links">
-                    @auth
-                        <div class="login_block">
-                            <a href="{{ route('home') }}">Главная</a>
-                            <a href="{{ route('account') }}">Аккаунт</a>
-                        </div>
-                        <form method="POST" action="{{ route('logout') }}">
+                    @if(Auth::guard('admin')->check())
+                        <form method="POST" action="{{ route('admin.logout') }}">
                             @csrf
                             <button type="Logout" class="btn btn-outline-secondary">Выйти</button>
                         </form>
-                    @else
-                        <a href="{{ route('home') }}">Главная</a>
-                        <a href="{{ route('login') }}">Войти</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Регистрация</a>
-                        @endif
-                    @endauth
+                    @endif
                 </div>
             @endif
-
-            <div id="wrap" class="container">
-                @yield('content')
+            <div class="row">
+                <div class="col-2 left_menu">
+                    <nav class="navbar navbar-light bg-light">
+                        <a class="navbar-brand" href="{{ route("admin.home") }}">Главная</a>
+                    </nav>
+                    <nav class="navbar navbar-light bg-light">
+                        <a class="navbar-brand" href="{{ route("admin.users") }}">Пользователи</a>
+                    </nav>
+                    <nav class="navbar navbar-light bg-light">
+                        <a class="navbar-brand" href="{{ route("admin.comment") }}">Посты</a>
+                    </nav>
+                </div>
+                <div class="col">
+                    <div id="wrap" class="container">
+                        @yield('content')
+                    </div>
+                </div>
             </div>
         </div>
     </body>

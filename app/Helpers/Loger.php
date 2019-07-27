@@ -65,6 +65,7 @@ class Loger
      */
     public static function add($type, $ids = null, $old_value = null, $new_value = null)
     {
+
         // Парсим в массивы
         $old_value = Arr::to_array($old_value);
         $new_value = Arr::to_array($new_value);
@@ -118,9 +119,9 @@ class Loger
 
         foreach($update as $key => $value){
             if(isset($old_value[$key])){
-                $tmp["old"] = $key . " = " . $old_value[$key] ."; ";
+                $tmp["old"] .= $key . " = " . $old_value[$key] ."; ";
             }
-            $tmp["new"] = $key . " = " . $value ."; ";
+            $tmp["new"] .= $key . " = " . $value ."; ";
         }
         // очищаем лишнее
         $tmp["new"] = trim($tmp["new"]);

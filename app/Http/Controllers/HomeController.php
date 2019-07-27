@@ -20,17 +20,17 @@ class HomeController extends Controller
         //$this->middleware('auth');
     }
 
-    /**
-     * Создает древовидную структуру комментариев
-     */
+
     public function tree($categories)
     {
-        $tree = array();
-        $tree['subcategory'] = array();
 
-        //Массив для сохранения категорий
-        $pointer = array();
-        $pointer[0] = &$tree;
+
+        $tree = array();
+		$tree['subcategory'] = array();
+
+		//Массив для сохранения категорий
+		$pointer = array();
+		$pointer[0] = &$tree;
         $pointer[0]['level'] = 0;
 
         $tmp = array();
@@ -43,10 +43,10 @@ class HomeController extends Controller
         $categories = $tmp;
 
         //Создаем древо категорий если они есть
-        foreach($categories AS $k=>$category){
-            if(isset($category['parent_id'])){
-                //Ссылка что бы была подвложенность
-                $pointer[$category['parent_id']]['subcategory'][] =& $pointer[$category['id']];
+		foreach($categories AS $k=>$category){
+			if(isset($category['parent_id'])){
+				//Ссылка что бы была подвложенность
+				$pointer[$category['parent_id']]['subcategory'][] =& $pointer[$category['id']];
                 $pointer[$category['id']] = $category;
 
                 if(!isset($pointer[$category['id']]['level'])){
@@ -57,10 +57,10 @@ class HomeController extends Controller
                     $pointer[$category['parent_id']]['level'] = 0;
                 }
 
-                $pointer[$category['id']]['level'] = 1+$pointer[$category['parent_id']]['level'];
-            }
-        }
-        unset($categories);
+				$pointer[$category['id']]['level'] = 1+$pointer[$category['parent_id']]['level'];
+			}
+		}
+		unset($categories);
 
 		//Берем все ключи категорий
 		$ids = array_keys($pointer);
@@ -101,22 +101,52 @@ class HomeController extends Controller
         return $tmp;
     }
     /**
+     * Sql запрос для админки и пользователей
+     */
+    public function sql_message(){
+        // Так как сами ответы являются недимыми я буду делать пагинацию по верхнему уровнею уровню
+        // Что бы исключить срезу, буду делать в два запроса.
+        $paginator = DB::table('messages as m')
+                ->join('users as u', 'u.id', '=', 'm.user_id')
+                ->select('m.id', 'm.parent_id', 'm.user_id', 'm.create_time', 'm.modify_time', 'm.message',
+                        'u.full_name')
+                ->whereNull("parent_id")->orderBy("id","desc")->paginate(10);
+
+        $array = Arr::to_array($paginator->items());
+
+        $ids = array();
+
+        foreach($array as $key => $value){
+            $ids[] = $value['id'];
+        }
+
+        // Второй запрос, достаем детей
+        $child = DB::table('messages as m')
+                ->join('users as u', 'u.id', '=', 'm.user_id')
+                ->select('m.id', 'm.parent_id', 'm.user_id', 'm.create_time', 'm.modify_time', 'm.message',
+                        'u.full_name')
+                ->whereIn("parent_id", $ids)->orderBy("id","desc")->get();
+
+        $child = Arr::to_array($child);
+
+        $return = array("arr" => array(), 'paginate' => $paginator);
+
+        $return["arr"] = array_merge($array,$child);
+
+        return $return;
+    }
+    /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
-        // Решить проблему с пагинацией для, для дочерних объектов.
-        $comment = DB::table('messages as m')
-            ->join('users as u', 'u.id', '=', 'm.user_id')
-            ->select('m.id', 'm.parent_id', 'm.user_id', 'm.create_time', 'm.modify_time', 'm.message',
-                      'u.full_name')
-            /*->whereNull("parent_id")*/->orderBy("parent_id")->orderBy("id","desc")->get();
-
-        $return = $this->tree(Arr::to_array($comment));
-
-        return view('content/home',["comment" => $return["tree"], "user_id" => Auth::id()]);
+        // Берем записи
+        $comment = $this->sql_message();
+        $return = $this->tree($comment["arr"]);
+        //dd($return["tree"]);
+        return view('content/home',["comment" => $return["tree"], "user_id" => Auth::id(), 'paginate' => $comment["paginate"]]);
     }
 
 }

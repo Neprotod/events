@@ -7,6 +7,7 @@ body{
 
 .left_menu{
     /*background:rgb(70, 70, 70);*/
+    min-width:240px;
 }
 
 .left_menu nav a{
@@ -43,6 +44,7 @@ html, body {
     position: absolute;
     right: 10px;
     top: 18px;
+    z-index:999;
 }
 
 .top-right > *{
@@ -69,7 +71,7 @@ html, body {
 }
 
 #wrap{
-    padding-top:80px;
+    margin-top:80px;
 }
 
 .home h1{

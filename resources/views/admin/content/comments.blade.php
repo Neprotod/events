@@ -5,26 +5,21 @@
                 <span class="name">{{ $item['full_name'] }}</span>
             </div>
             <div class="message">{{ $item['message'] }}</div>
-            @auth
             <div class="tools">
-                <div class="answer">
-                    Ответить
+                <div class="drop">
+                    <a href="{{ route("admin.comment_drop",$item['id']) }}">Удалить</a>
                 </div>
-                @if ($item['user_id'] == $user_id)
-                    <div class="redact">
-                        Редактировать
-                    </div>
-                @endif
+                <div class="redact">
+                    Редактировать
+                </div>
             </div>
-            @endauth
         </div>
     </div>
     @isset($item['subcategory'])
-        @include('content/sub',["item" => $item['subcategory']])
+        @include('admin/content/sub',["item" => $item['subcategory']])
     @endisset
 @endforeach
 {{ $paginate->links() }}
-
 <script>
     handel.answer();
     handel.redact();

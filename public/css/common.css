@@ -1,0 +1,87 @@
+html, body {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Nunito', sans-serif;
+}
+
+
+.position-ref {
+    position: relative;
+}
+
+.top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.links > a {
+    color: #636b6f;
+    padding: 0 25px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.m-b-md {
+    margin-bottom: 30px;
+}
+
+#wrap{
+    padding-top:80px;
+}
+
+.home h1{
+    text-align:center;
+}
+
+.bd-callout-info{
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid transparent;
+    border-left-color: #5bc0de;
+    border-left-width: .25rem;
+    border-radius: .25rem;
+}
+
+.comment .user_info{
+    margin-top:-22px;
+    color:#666;
+    font-size:14px;
+}
+
+.comment .answer{
+    margin-bottom:-20px;
+    color:#666;
+    cursor:pointer;
+}
+
+.comment .answer:hover{
+    color:#999;
+}
+
+.comment_box.sub{
+    margin-left:40px;
+}
+
+.comment_box.sub .comment{
+    border-left-color: #87d7f0;
+}
+
+.card_login{
+    width:300px;
+    margin:auto;
+}
+
+.card_regist{
+    min-width:300px;
+    max-width:600px;
+    margin:auto;
+}
+
+.send{
+    margin-top:5px;
+}

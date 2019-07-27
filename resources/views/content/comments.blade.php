@@ -1,46 +1,29 @@
-<div class="comment_box" data-id="1">
+@foreach ($comment as $item)
+    <div class="comment_box" data-id="{{ $item['id'] }}">
         <div class="bd-callout-info comment">
             <div class="user_info">
-                <span class="name">Федор Cумкен</span>
+                <span class="name">{{ $item['full_name'] }}</span>
             </div>
-            <div class="massage">
-                Небольшое сообщение
-            </div>
+            <div class="message">{{ $item['message'] }}</div>
             @auth
+            <div class="tools">
                 <div class="answer">
                     Ответить
                 </div>
+                @if ($item['user_id'] == $user_id)
+                    <div class="redact">
+                        Редактировать
+                    </div>
+                @endif
+            </div>
             @endauth
         </div>
     </div>
-    <div class="comment_box" data-id="2">
-        <div class="bd-callout-info comment">
-            <div class="user_info">
-                <span class="name">Федор Cумкен</span>
-            </div>
-            <div class="massage">
-                Больше текста<br>
-                Отступк и снова текст
-            </div>
-            <div class="answer">
-                Ответить
-            </div>
-        </div>
-    </div>
-    <div class="comment_box sub" data-id="3">
-        <div class="bd-callout-info comment">
-            <div class="user_info">
-                <span class="name">Федор Cумкен</span>
-            </div>
-            <div class="massage">
-                Больше текста<br>
-                Отступк и снова текст
-            </div>
-            <div class="answer">
-                Ответить
-            </div>
-        </div>
-    </div>
-    <script>
-        handel.answer();
-    </script>
+    @isset($item['subcategory'])
+        @include('content/sub',["item" => $item['subcategory']])
+    @endisset
+@endforeach
+<script>
+    handel.answer();
+    handel.redact();
+</script>

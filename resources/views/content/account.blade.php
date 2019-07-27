@@ -9,6 +9,11 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
+                            @if(session()->has('message'))
+                                <div class="alert alert-success">
+                                    {{ session()->get('message') }}
+                                </div>
+                            @endif
                             <form method="POST" action="{{ route('account') }}">
                                 @csrf
                                 <input type="hidden" name="log_action" value="update"  />

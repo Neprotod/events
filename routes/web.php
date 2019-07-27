@@ -15,5 +15,7 @@ Route::get('/', "HomeController@index")->name('home');
 
 Auth::routes();
 
-Route::get( '/account', 'UserController@index' )->name('account');
+Route::get('/account', 'UserController@index')->name('account');
 Route::post('/account', 'UserController@update')->name('account');
+
+Route::post('/comment', 'CommentsController@comment')->name('comment');

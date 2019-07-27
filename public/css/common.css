@@ -62,13 +62,21 @@ html, body {
     font-size:14px;
 }
 
-.comment .answer{
+.comment .tools{
     margin-bottom:-20px;
     color:#666;
+}
+
+.comment .tools > *{
+    /*float:left;*/
+    display:inline-block;
+}
+
+.comment .answer, .comment .redact{
     cursor:pointer;
 }
 
-.comment .answer:hover{
+.comment .answer:hover, .comment .redact:hover{
     color:#999;
 }
 
@@ -107,6 +115,11 @@ html, body {
 .form_string{
     margin-top:6px;
 }
+
+.message.hide{
+    display:none;
+}
+
 
 
 .birthday::-webkit-input-placeholder {font-size:12px;}

@@ -23,8 +23,6 @@
         @include('content/sub',["item" => $item['subcategory']])
     @endisset
 @endforeach
-{{ $paginate->links() }}
-
 <script>
     handel.answer();
     handel.redact();

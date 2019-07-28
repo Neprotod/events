@@ -106,34 +106,14 @@ class HomeController extends Controller
     public function sql_message(){
         // Так как сами ответы являются недимыми я буду делать пагинацию по верхнему уровнею уровню
         // Что бы исключить срезу, буду делать в два запроса.
-        $paginator = DB::table('messages as m')
-                ->join('users as u', 'u.id', '=', 'm.user_id')
-                ->select('m.id', 'm.parent_id', 'm.user_id', 'm.create_time', 'm.modify_time', 'm.message',
-                        'u.full_name')
-                ->whereNull("parent_id")->orderBy("id","desc")->paginate(10);
+        $comment = DB::table('messages as m')
+            ->join('users as u', 'u.id', '=', 'm.user_id')
+            ->select('m.id', 'm.parent_id', 'm.user_id', 'm.create_time', 'm.modify_time', 'm.message',
+                      'u.full_name')
+            /*->whereNull("parent_id")*/->orderBy("parent_id")->orderBy("id","desc")->get();
 
-        $array = Arr::to_array($paginator->items());
+        return Arr::to_array($comment);
 
-        $ids = array();
-
-        foreach($array as $key => $value){
-            $ids[] = $value['id'];
-        }
-
-        // Второй запрос, достаем детей
-        $child = DB::table('messages as m')
-                ->join('users as u', 'u.id', '=', 'm.user_id')
-                ->select('m.id', 'm.parent_id', 'm.user_id', 'm.create_time', 'm.modify_time', 'm.message',
-                        'u.full_name')
-                ->whereIn("parent_id", $ids)->orderBy("id","desc")->get();
-
-        $child = Arr::to_array($child);
-
-        $return = array("arr" => array(), 'paginate' => $paginator);
-
-        $return["arr"] = array_merge($array,$child);
-
-        return $return;
     }
     /**
      * Show the application dashboard.
@@ -144,9 +124,8 @@ class HomeController extends Controller
     {
         // Берем записи
         $comment = $this->sql_message();
-        $return = $this->tree($comment["arr"]);
-        //dd($return["tree"]);
-        return view('content/home',["comment" => $return["tree"], "user_id" => Auth::id(), 'paginate' => $comment["paginate"]]);
+        $return = $this->tree($comment);
+        return view('content/home',["comment" => $return["tree"], "user_id" => Auth::id()]);
     }
 
 }

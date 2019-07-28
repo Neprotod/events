@@ -19,8 +19,8 @@ class CommentsController extends Controller
         $HomeController = new HomeController();
         $comment = $HomeController->sql_message();
 
-        $return = $HomeController->tree($comment["arr"]);
-        return view('admin/content/post',["comment" => $return["tree"], 'paginate' => $comment["paginate"]]);
+        $return = $HomeController->tree($comment);
+        return view('admin/content/post',["comment" => $return["tree"]]);
     }
     /**
      * Обновлеяем данные
